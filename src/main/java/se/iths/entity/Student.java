@@ -32,8 +32,7 @@ public class Student {
     @NotNull
     private String email;
 
-    @Size(min = 10)
-    @Size(max = 10)
+    @Size(min = 10, max = 10)
     private String phoneNumber;
 
     public Long getId() {

@@ -4,7 +4,18 @@ import se.iths.entity.Student;
 import se.iths.service.StudentService;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.validation.Validator;
+import javax.ws.rs.BadRequestException;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.PATCH;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.URI;
@@ -18,19 +29,29 @@ public class StudentRest {
     @Inject
     StudentService studentService;
 
+    @Inject
+    Validator validator;
 
     @Path("")
     @POST
     public Response createStudent(Student student) {
-        studentService.createStudent(student);
-        return Response.created(URI.create("/sms/students/" + student.getId())).build();
+        Student createdStudent = studentService.create(student);
+        return Response.created(URI.create("/sms/students/" + student.getId()))
+                .entity(createdStudent)
+                .build();
     }
 
     @Path("{id}")
     @PUT
     public Response updateStudent(Student student, @PathParam("id") Long id) {
-        studentService.updateStudent(student, id);
-        return Response.accepted(student).build();
+        var validations = validator.validate(student);
+
+        if (validations.size() > 0)
+            throw new BadRequestException("Invalid student");
+
+        Student updatedStudent = studentService.update(student, id);
+        return Response.ok(updatedStudent)
+                .build();
     }
 
     @Path("query")
@@ -52,8 +73,9 @@ public class StudentRest {
     @Path("")
     @GET
     public Response getAllStudents() {
-        List<Student> foundStudents = studentService.getAllStudents();
-        return Response.ok(foundStudents).build();
+        List<Student> foundStudents = studentService.getAll();
+        return Response.ok(foundStudents)
+                .build();
     }
 
     @Path("{id}")
