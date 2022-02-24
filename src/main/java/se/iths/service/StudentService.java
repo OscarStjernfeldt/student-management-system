@@ -8,6 +8,7 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Transactional
 public class StudentService {
@@ -15,8 +16,9 @@ public class StudentService {
     @PersistenceContext
     EntityManager entityManager;
 
-    public void createStudent(Student student) {
+    public Student create(Student student) {
         entityManager.persist(student);
+        return student;
     }
 
     public void updateStudent(Student student, Long id) {
@@ -25,18 +27,14 @@ public class StudentService {
         entityManager.merge(student);
     }
 
-    public List<Student> getAllStudentsByLastName(String lastName) {
-        TypedQuery<Student> query = entityManager.createQuery("SELECT s FROM Student s WHERE s.lastName LIKE :lastName", Student.class);
-        query.setParameter("lastName", "%" + lastName + "%");
-        return query.getResultList();
-//        return entityManager.createQuery("SELECT s FROM Student s WHERE s.lastName LIKE :lastName", Student.class)
-//                .setParameter("lastName", "%" + lastName + "%")
-//                .getResultList();
+    public List<Student> getByLastName(String lastName) {
+        return entityManager.createQuery("SELECT s FROM Student s WHERE s.lastName LIKE :lastName",
+                        Student.class)
+                .setParameter("lastName", "%" + lastName + "%")
+                .getResultList();
     }
 
-    //MediaType.APPLICATION_JSON_TYPE
-
-    public void deleteStudent(Long id) {
+    public void delete(Long id) {
         Student foundStudent = entityManager.find(Student.class, id);
         entityManager.remove(foundStudent);
     }
