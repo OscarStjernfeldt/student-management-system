@@ -36,8 +36,17 @@ public class StudentRest {
     @Path("query")
     @GET
     public Response getStudents(@QueryParam("lastName") String lastName) {
-        List<Student> foundStudents = studentService.getAllStudentsByLastName(lastName);
-        return Response.ok(foundStudents).build();
+        List<Student> foundStudents = studentService.getByLastName(lastName);
+        return Response.ok(foundStudents)
+                .build();
+    }
+
+    @Path("{id}")
+    @GET
+    public Response getStudentById(@PathParam("id") Long id) {
+        Student foundStudent = studentService.getById(id);
+        return Response.ok(foundStudent)
+                .build();
     }
 
     @Path("")
@@ -50,7 +59,17 @@ public class StudentRest {
     @Path("{id}")
     @DELETE
     public Response deleteStudent(@PathParam("id") Long id) {
-        studentService.deleteStudent(id);
-        return Response.ok().build();
+        studentService.delete(id);
+        return Response.ok()
+                .build();
+    }
+
+    @Path("{id}")
+    @PATCH
+    public Response update(@PathParam("id") Long id, Student student) {
+        Student patchedStudent = studentService.patch(student, id);
+
+        return Response.ok(patchedStudent)
+                .build();
     }
 }
