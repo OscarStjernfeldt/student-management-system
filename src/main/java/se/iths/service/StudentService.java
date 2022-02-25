@@ -33,9 +33,10 @@ public class StudentService {
         validateStudent(student);
 
         if (!Objects.equals(student.getId(), id)) {
-            throw new IllegalStateException("Provided student ids do not match");
+            throw new BadRequestException("Entity id did not match given id");
         }
-        return entityManager.merge(student);
+
+        return entityManager.merge(getById(student.getId()));
     }
 
     private void validateStudent(Student student) {
@@ -53,6 +54,7 @@ public class StudentService {
     }
 
     public void delete(Long id) {
+        getById(id);
         Student foundStudent = entityManager.find(Student.class, id);
         entityManager.remove(foundStudent);
     }
