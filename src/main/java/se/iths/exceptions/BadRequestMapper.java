@@ -13,7 +13,7 @@ public class BadRequestMapper implements ExceptionMapper<BadRequestException> {
     public Response toResponse(BadRequestException e) {
         return Response.status(Response.Status.BAD_REQUEST)
                 .entity(new ExceptionsAsJson(e.getMessage(), Response.Status.BAD_REQUEST.getStatusCode()))
-                .type(MediaType.APPLICATION_JSON)
+                .type(MediaType.APPLICATION_JSON_TYPE)
                 .build();
     }
 }
