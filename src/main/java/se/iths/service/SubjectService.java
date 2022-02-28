@@ -36,7 +36,7 @@ public class SubjectService {
             throw new BadRequestException("Entity id did not match given id");
         }
 
-        return entityManager.merge(getById(subject.getId()));
+        return entityManager.merge(subject);
     }
 
     private void validateSubject(Subject subject) {

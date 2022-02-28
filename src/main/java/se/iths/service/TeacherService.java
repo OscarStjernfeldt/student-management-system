@@ -36,7 +36,7 @@ public class TeacherService {
             throw new BadRequestException("Entity id did not match given id");
         }
 
-        return entityManager.merge(getById(teacher.getId()));
+        return entityManager.merge(teacher);
     }
 
     private void validateTeacher(Teacher teacher) {
