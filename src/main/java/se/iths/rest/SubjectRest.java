@@ -19,7 +19,7 @@ package se.iths.rest;
         import java.net.URI;
         import java.util.List;
 
-@Path("students")
+@Path("subjects")
 @Consumes(MediaType.APPLICATION_JSON)
 @Produces(MediaType.APPLICATION_JSON)
 public class SubjectRest {
