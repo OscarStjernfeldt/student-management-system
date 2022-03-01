@@ -1,5 +1,6 @@
 package se.iths.service;
 
+import se.iths.entity.Student;
 import se.iths.entity.Subject;
 
 import javax.inject.Inject;
@@ -69,5 +70,11 @@ public class SubjectService {
             oldSubject.setName(subject.getName());
 
         return oldSubject;
+    }
+
+    public List<Student> getAllStudents(Long id) {
+        return entityManager.createQuery("SELECT s.student FROM Subject s WHERE s.id = :id ", Student.class)
+                .setParameter("id", id)
+                .getResultList();
     }
 }
