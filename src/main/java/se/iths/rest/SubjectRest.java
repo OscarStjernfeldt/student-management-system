@@ -13,7 +13,6 @@ package se.iths.rest;
         import javax.ws.rs.Path;
         import javax.ws.rs.PathParam;
         import javax.ws.rs.Produces;
-        import javax.ws.rs.QueryParam;
         import javax.ws.rs.core.MediaType;
         import javax.ws.rs.core.Response;
         import java.net.URI;
@@ -25,12 +24,12 @@ package se.iths.rest;
 public class SubjectRest {
 
     @Inject
-    SubjectService SubjectService;
+    SubjectService subjectService;
 
     @Path("")
     @POST
     public Response createSubject(Subject subject) {
-        Subject createdSubject = SubjectService.create(subject);
+        Subject createdSubject = subjectService.create(subject);
         return Response.created(URI.create("/sms/subjects/" + subject.getId()))
                 .entity(createdSubject)
                 .build();
@@ -39,7 +38,7 @@ public class SubjectRest {
     @Path("{id}")
     @PUT
     public Response updateSubject(Subject subject, @PathParam("id") Long id) {
-        Subject updatedSubject = SubjectService.update(subject, id);
+        Subject updatedSubject = subjectService.update(subject, id);
         return Response.ok(updatedSubject)
                 .build();
     }
@@ -47,7 +46,7 @@ public class SubjectRest {
     @Path("{id}")
     @GET
     public Response getSubjectById(@PathParam("id") Long id) {
-        Subject foundSubject = SubjectService.getById(id);
+        Subject foundSubject = subjectService.getById(id);
         return Response.ok(foundSubject)
                 .build();
     }
@@ -55,7 +54,7 @@ public class SubjectRest {
     @Path("")
     @GET
     public Response getAllSubjects() {
-        List<Subject> foundSubjects = SubjectService.getAll();
+        List<Subject> foundSubjects = subjectService.getAll();
         return Response.ok(foundSubjects)
                 .build();
     }
@@ -63,7 +62,7 @@ public class SubjectRest {
     @Path("{id}")
     @DELETE
     public Response deleteSubject(@PathParam("id") Long id) {
-        SubjectService.delete(id);
+        subjectService.delete(id);
         return Response.ok()
                 .build();
     }
@@ -71,9 +70,15 @@ public class SubjectRest {
     @Path("{id}")
     @PATCH
     public Response update(@PathParam("id") Long id, Subject subject) {
-        Subject patchedSubject = SubjectService.patch(subject, id);
+        Subject patchedSubject = subjectService.patch(subject, id);
 
         return Response.ok(patchedSubject)
                 .build();
+    }
+
+    @Path("{id}/students")
+    @GET
+    public Response getAllStudentsInSubject(@PathParam("id") Long id) {
+        return Response.ok(subjectService.getAllStudents(id)).build();
     }
 }
