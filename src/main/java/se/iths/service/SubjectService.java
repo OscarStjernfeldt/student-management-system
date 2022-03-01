@@ -73,7 +73,7 @@ public class SubjectService {
     }
 
     public List<Student> getAllStudents(Long id) {
-        return entityManager.createQuery("SELECT s.student FROM Subject s WHERE s.id = :id ", Student.class)
+        return entityManager.createQuery("SELECT s.students FROM Subject s WHERE s.id = :id ", Student.class)
                 .setParameter("id", id)
                 .getResultList();
     }
